@@ -48,6 +48,14 @@
     <input type="number" id="etanolGasolina" value="30" step="1">
   </label>
 
+  <label>Preço do etanol (R$):
+    <input type="number" id="precoEtanol" value="4.49" step="0.01">
+  </label>
+
+  <label>Preço da gasolina (R$):
+    <input type="number" id="precoGasolina" value="5.89" step="0.01">
+  </label>
+
   <button onclick="calcular()">Calcular Mistura</button>
 
   <div class="result" id="resultado"></div>
@@ -57,6 +65,8 @@
       const tanque = parseFloat(document.getElementById("tanque").value);
       const eDesejado = parseFloat(document.getElementById("etanolDesejado").value) / 100;
       const eGasolina = parseFloat(document.getElementById("etanolGasolina").value) / 100;
+      const precoEtanol = parseFloat(document.getElementById("precoEtanol").value);
+      const precoGasolina = parseFloat(document.getElementById("precoGasolina").value);
 
       const gasolina = (tanque * (eDesejado - 1)) / (eGasolina - 1);
       const etanol = tanque - gasolina;
@@ -66,10 +76,15 @@
         return;
       }
 
+      const custoTotal = (etanol * precoEtanol) + (gasolina * precoGasolina);
+      const precoPorLitro = custoTotal / tanque;
+
       document.getElementById("resultado").innerHTML = `
         Coloque:<br>
         <strong>${etanol.toFixed(2)} L</strong> de etanol hidratado<br>
-        <strong>${gasolina.toFixed(2)} L</strong> de gasolina (E${eGasolina * 100})
+        <strong>${gasolina.toFixed(2)} L</strong> de gasolina (E${eGasolina * 100})<br><br>
+        Custo total da mistura: <strong>R$ ${custoTotal.toFixed(2)}</strong><br>
+        Preço por litro: <strong>R$ ${precoPorLitro.toFixed(2)}</strong>
       `;
     }
 
