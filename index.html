@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora de Etanol</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <meta name="theme-color" content="#007bff">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    label, input {
+      display: block;
+      margin: 10px 0;
+    }
+    button {
+      padding: 10px;
+      width: 100%;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Calculadora de Mistura de Etanol</h2>
+
+  <label>Capacidade do tanque (litros):
+    <input type="number" id="tanque" value="48" step="0.1">
+  </label>
+
+  <label>Proporção de etanol desejada (%):
+    <input type="number" id="etanolDesejado" value="85" step="1">
+  </label>
+
+  <label>Etanol presente na gasolina (%):
+    <input type="number" id="etanolGasolina" value="30" step="1">
+  </label>
+
+  <button onclick="calcular()">Calcular Mistura</button>
+
+  <div class="result" id="resultado"></div>
+
+  <script>
+    function calcular() {
+      const tanque = parseFloat(document.getElementById("tanque").value);
+      const eDesejado = parseFloat(document.getElementById("etanolDesejado").value) / 100;
+      const eGasolina = parseFloat(document.getElementById("etanolGasolina").value) / 100;
+
+      const gasolina = (tanque * (eDesejado - 1)) / (eGasolina - 1);
+      const etanol = tanque - gasolina;
+
+      if (gasolina < 0 || gasolina > tanque) {
+        document.getElementById("resultado").innerHTML = "Proporção inválida.";
+        return;
+      }
+
+      document.getElementById("resultado").innerHTML = `
+        Coloque:<br>
+        <strong>${etanol.toFixed(2)} L</strong> de etanol hidratado<br>
+        <strong>${gasolina.toFixed(2)} L</strong> de gasolina (E${eGasolina * 100})
+      `;
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+</body>
+</html>
